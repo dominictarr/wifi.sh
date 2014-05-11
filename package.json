@@ -1,7 +1,7 @@
 {
   "name": "wifi.sh",
   "description": "connect to wifi",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "homepage": "https://github.com/dominictarr/wifi.sh",
   "repository": {
     "type": "git",
@@ -9,5 +9,5 @@
   },
   "bin": "./index.sh",
   "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://dominictarr.com)",
-  "license": "MIT"  
+  "license": "MIT"
 }
