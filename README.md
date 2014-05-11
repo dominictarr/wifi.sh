@@ -28,7 +28,22 @@ wifi.sh interface
 
 sudo INTERFACE=wlan0 wifi.sh connect
 
+# set wpa_supplicant.conf location
+
+sudo WPA_CONF=/etc/wpa_supplicant.conf wifi.sh connect
+
 ```
+
+## Cool Links
+
+Some other `wpa_supplicant` wrappers on npm,
+
+* [wit](https://github.com/substack/wit)
+* [wireless](https://github.com/tlhunter/node-wireless)
+
+These both use node, wifi.sh has the distinction that it is
+all in bash, so will run where there are very low resources,
+such as on a raspberry pi.
 
 ## License
 
