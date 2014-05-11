@@ -1,7 +1,7 @@
 #! /bin/bash
 
 
-WPA_CONF=/etc/wpa_supplicant.conf
+WPA_CONF=${WPA_CONF-/etc/wpa_suppplicant.conf}
 
 # SSID PASSPHRASE
 add () {
