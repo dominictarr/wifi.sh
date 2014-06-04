@@ -6,7 +6,21 @@ bash script to connect to wifi
 
 ``` bash
 npm install -g wifi.sh
+```
 
+or
+
+``` bash
+bpkg install wifi
+```
+
+or
+
+``` bash
+bpkg install dominictar/wifi.sh
+```
+
+``` bash
 #list currently available wifi networks.
 sudo wifi.sh scan
 
