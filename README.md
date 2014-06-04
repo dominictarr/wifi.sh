@@ -11,7 +11,6 @@ npm install -g wifi.sh
 or
 
 ``` bash
-<<<<<<< HEAD
 bpkg install wifi
 ```
 
