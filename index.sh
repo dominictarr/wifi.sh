@@ -66,6 +66,12 @@ connect () {
   exit $?
 }
 
+open () {
+  #connect to an open wifi
+  get_interface
+  iw connect "$INTERFACE" -w "$1"
+}
+
 "$@"
 
-echo 'USAGE add|connect|dump|interface|scan'
+echo 'USAGE scan|connect|add {network} {pass}|open {network}|dump|interface'
