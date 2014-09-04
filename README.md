@@ -32,6 +32,14 @@ sudo INTERFACE=wlan0 wifi.sh connect
 
 sudo WPA_CONF=/etc/wpa_supplicant.conf wifi.sh connect
 
+# connect to open network
+
+sudo wifi.sh open "A great SSID"
+
+# disconnect any wifi network
+
+sudo INTERFACE=wlan0 wifi.sh disconnect
+
 ```
 
 ## Cool Links
