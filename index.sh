@@ -69,7 +69,15 @@ connect () {
 open () {
   #connect to an open wifi
   get_interface
-  iw connect "$INTERFACE" -w "$1"
+  iw dev "$INTERFACE" connect -w "$1"
+  exit $?
+}
+
+disconnect () {
+  get_interface
+  killall wpa_supplicant
+  iw dev "$INTERFACE" disconnect
+  exit 0
 }
 
 "$@"
