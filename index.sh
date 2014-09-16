@@ -69,7 +69,19 @@ connect () {
 open () {
   #connect to an open wifi
   get_interface
-  iw dev "$INTERFACE" connect -w "$1"
+  while true 
+  do
+    iw dev "$INTERFACE" disconnect
+    iw dev "$INTERFACE" connect -w "$1"
+    STATUS=
+
+    while [ "$STATUS" != 'Not connected.' ]
+    do
+      sleep 1
+      STATUS=$(iw dev "$INTERFACE" link)
+      echo "$STATUS"
+    done
+  done
   exit $?
 }
 
