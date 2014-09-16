@@ -61,12 +61,14 @@ dump () {
 }
 
 connect () {
+  dhcpcd #start dhcpcd if necessary
   get_interface
   wpa_supplicant -i $INTERFACE -c $WPA_CONF
   exit $?
 }
 
 open () {
+  dhcpcd #start dhcpcd if necessary
   #connect to an open wifi
   get_interface
   while true 
