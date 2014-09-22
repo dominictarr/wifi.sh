@@ -7,7 +7,7 @@ isroot () {
   # this is required for controlling wifi device.
 
   if [ $UID -ne 0 ]; then
-    echo 'must run as root to access wifi devices' >&2
+    echo 'Error: must run as root to access wifi devices' >&2
     exit 1
   fi
 }
@@ -18,7 +18,7 @@ add () {
   # because they do not understand unix.
 
   PASS=`wpa_passphrase "$1" "$2"` || {
-    echo $PASS 1>&2
+    echo Error: $PASS 1>&2
     exit 1
   }
   echo >> $WPA_CONF
