@@ -1,12 +1,22 @@
 #! /bin/bash
 
-
 WPA_CONF=${WPA_CONF-/etc/wpa_supplicant.conf}
+
+isroot () {
+  # check that the script is running as root
+  # this is required for controlling wifi device.
+
+  if [ $UID -ne 0 ]; then
+    echo 'must run as root to access wifi devices' >&2
+    exit 1
+  fi
+}
 
 # SSID PASSPHRASE
 add () {
   # wpa_passphrase dumps the error message on stdout
   # because they do not understand unix.
+
   PASS=`wpa_passphrase "$1" "$2"` || {
     echo $PASS 1>&2
     exit 1
@@ -18,6 +28,7 @@ add () {
 parse () {
   #there is a bug here for some wifi networks that have spaces in the name(?)
   # TODO: parse out the encryption.
+
   while read signal;
   do
     read SSID
@@ -32,6 +43,7 @@ parse () {
 }
 
 scan () {
+  isroot
   get_interface
   echo 'SSID                                    , SIGNAL'
   iw dev "$INTERFACE" scan \
@@ -69,6 +81,7 @@ dump () {
 }
 
 connect () {
+  isroot
   dhcpcd #start dhcpcd if necessary
   get_interface
   wpa_supplicant -i $INTERFACE -c $WPA_CONF
@@ -80,6 +93,7 @@ open () {
   # and then start polling the status.
   # if the connection drops, reconnect automatically.
 
+  isroot
   dhcpcd #start dhcpcd if necessary
   get_interface
 
