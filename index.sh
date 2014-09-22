@@ -5,11 +5,19 @@ WPA_CONF=${WPA_CONF-/etc/wpa_supplicant.conf}
 
 # SSID PASSPHRASE
 add () {
-  wpa_passphrase "$1" "$2" >> $WPA_CONF
+  # wpa_passphrase dumps the error message on stdout
+  # because they do not understand unix.
+  PASS=`wpa_passphrase "$1" "$2"` || {
+    echo $PASS 1>&2
+    exit 1
+  }
+  echo >> $WPA_CONF
   exit 0
 }
 
 parse () {
+  #there is a bug here for some wifi networks that have spaces in the name(?)
+  # TODO: parse out the encryption.
   while read signal;
   do
     read SSID
@@ -68,10 +76,14 @@ connect () {
 }
 
 open () {
+  # because iw does not block, we need to start it,
+  # and then start polling the status.
+  # if the connection drops, reconnect automatically.
+
   dhcpcd #start dhcpcd if necessary
-  #connect to an open wifi
   get_interface
-  while true 
+
+  while true
   do
     iw dev "$INTERFACE" disconnect
     iw dev "$INTERFACE" connect -w "$1"
