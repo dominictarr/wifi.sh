@@ -106,6 +106,17 @@ disconnect () {
   exit 0
 }
 
+version () {
+  v=$(grep version package.json)
+  v=${v%'"'*}
+  v=${v##*'"'}
+  echo $v
+  exit 0
+}
+
+[ "$1" = "-v" ] && version
+
 "$@"
 
-echo 'USAGE scan|connect|add {network} {pass}|open {network}|dump|interface'
+echo 'USAGE scan|connect|add {network} {pass}|open {network}|dump|interface|version' >&2
+
