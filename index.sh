@@ -121,7 +121,7 @@ disconnect () {
 }
 
 version () {
-  v=$(grep version package.json)
+  v=$(grep version $(dirname $(realpath "$0"))/package.json)
   v=${v%'"'*}
   v=${v##*'"'}
   echo $v
