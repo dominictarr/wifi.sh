@@ -12,7 +12,6 @@ isroot () {
   fi
 }
 
-# SSID PASSPHRASE
 add () {
   # wpa_passphrase dumps the error message on stdout
   # because they do not understand unix.
@@ -26,8 +25,6 @@ add () {
 }
 
 parse () {
-  #there is a bug here for some wifi networks that have spaces in the name(?)
-  # TODO: parse out the encryption.
 
   while read LINE;
   do
@@ -36,7 +33,7 @@ parse () {
     case "$LINE" in
       BSS*)
         if [ x"$BSS" != x ]; then
-          printf '%-40s, %5s, %s\n' "$SSID" "$SIGNAL" "$ENC"
+          printf '%-40s, %5s , %s\n' "$SSID" "$SIGNAL" "$ENC"
           SIGNAL=
           ENC=
         fi
@@ -57,7 +54,7 @@ parse () {
       ;;
     esac
   done
-  printf '%-40s, %5s, %s\n' "$SSID" "$SIGNAL" "$ENC"
+  printf '%-40s, %5s , %s\n' "$SSID" "$SIGNAL" "$ENC"
 }
 
 _scanraw () {
@@ -75,14 +72,13 @@ scanraw () {
 scan () {
   isroot
   get_interface
-  echo 'Ssid                                    , Signal, Security'
+  echo 'SSID                                    , SIGNAL , SECURITY'
 
   # to be honest, I can't figure out the correct parameters
   # to sort, but this seems to produce good output.
   _scanraw | parse | sort -k 3
   exit 0
 }
-
 
 parse_interface () {
   while read line;
