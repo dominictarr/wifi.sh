@@ -29,29 +29,57 @@ parse () {
   #there is a bug here for some wifi networks that have spaces in the name(?)
   # TODO: parse out the encryption.
 
-  while read signal;
+  while read LINE;
   do
-    read SSID
-    signal=${signal#*: }
-    signal=${signal% *}
-    SSID=${SSID#*: }
-    #filter out empty SSID.
-    if [ "$SSID" != "SSID:" ]; then
-      printf '%-40s, %5s\n' "$SSID" "$signal"
-    fi
+    LINE=${LINE# *}
+
+    case "$LINE" in
+      BSS*)
+        if [ x"$BSS" != x ]; then
+          printf '%-40s, %5s, %s\n' "$SSID" "$SIGNAL" "$ENC"
+          SIGNAL=
+          ENC=
+        fi
+        BSS=${LINE#BSS }
+        BSS=${BSS%(*}
+      ;;
+      SSID*)
+        SSID=${LINE#SSID: }
+      ;;
+      signal*)
+        SIGNAL=${LINE#signal: }
+        SIGNAL=${SIGNAL% dBm}
+      ;;
+      *)
+        E=${LINE%%:*}
+        E="$E"${LINE#*Version: }
+        ENC="$ENC$E "
+      ;;
+    esac
   done
+  printf '%-40s, %5s, %s\n' "$SSID" "$SIGNAL" "$ENC"
+}
+
+_scanraw () {
+  iw dev "$INTERFACE" scan \
+  | grep -E '(^BSS)|SSID|signal|WPA|WPS|WEP|RSN'
+}
+
+scanraw () {
+  isroot
+  get_interface
+  _scanraw
+  exit 0
 }
 
 scan () {
   isroot
   get_interface
-  echo 'SSID                                    , SIGNAL'
-  iw dev "$INTERFACE" scan \
-  | grep -E 'SSID|signal' \
-  | parse \
-  | sort -k 3
-  # to  be honest, I can't figure out the correct parameters
+  echo 'Ssid                                    , Signal, Security'
+
+  # to be honest, I can't figure out the correct parameters
   # to sort, but this seems to produce good output.
+  _scanraw | parse | sort -k 3
   exit 0
 }
 
