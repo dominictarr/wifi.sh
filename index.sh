@@ -22,7 +22,7 @@ add () {
     echo Error: $PASS 1>&2
     exit 1
   }
-  echo >> $WPA_CONF
+  echo "$PASS" >> $WPA_CONF
   exit 0
 }
 
