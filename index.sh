@@ -13,8 +13,10 @@ isroot () {
 }
 
 add () {
+  # use wpa_passphrase command to add the new network to wpa_supplicant conf.
   # wpa_passphrase dumps the error message on stdout
   # because they do not understand unix.
+  # detect this case and exit with a helpful error message.
 
   PASS=`wpa_passphrase "$1" "$2"` || {
     echo Error: $PASS 1>&2
@@ -25,7 +27,7 @@ add () {
 }
 
 parse () {
-
+  # parse the output of iw scan
   while read LINE;
   do
     LINE=${LINE# *}
@@ -96,6 +98,13 @@ parse_interface () {
 }
 
 get_interface () {
+  # Grab the most recently added interface.
+  # Your laptop may use a wifi chipset that has poor linux driver support.
+  # (this is because of microsoft's consipracy against linux)
+  # In this case, you may have more success using a usb wifi dongle.
+  # If you are using a wifi dongle this should return the one
+  # that you most recently plugged in.
+
   INTERFACE=${INTERFACE-$(ip -o link | parse_interface)}
 }
 
@@ -114,6 +123,8 @@ connect () {
   isroot
   dhcpcd #start dhcpcd if necessary
   get_interface
+  # if there are two wpa_supplicants running, things break.
+  killall wpa_supplicant
   wpa_supplicant -i $INTERFACE -c $WPA_CONF
   exit $?
 }
@@ -129,9 +140,23 @@ open () {
 
   while true
   do
+    # If the interface was down, put it back up.
+    # (for example, if you had turned wifi off with a hardware switch)
+    ip link set $INTERFACE up
+
+    # ensure we are disconnected.
+    # (otherwise, may get "operation already in progress")
     iw dev "$INTERFACE" disconnect
+
+    # connect to an open wifi network.
+    # 1: Unspecified failure probably means that the name you
+    #    entered was not an open wifi network.
+
     iw dev "$INTERFACE" connect -w "$1"
     STATUS=
+
+    # poll the status to check if we are still connected.
+    # if we become disconnected, come back into the main loop and reconnect.
 
     while [ "$STATUS" != 'Not connected.' ]
     do
@@ -160,7 +185,7 @@ version () {
 
 [ "$1" = "-v" ] && version
 
-if [ $0 = $BASH_SOURCE ]; then
+if [ "$0" = "$BASH_SOURCE" ]; then
 
   "$@"
   echo 'USAGE scan|connect|add {network} {pass}|open {network}|dump|interface|version' >&2
