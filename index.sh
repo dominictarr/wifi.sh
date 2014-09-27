@@ -157,7 +157,9 @@ version () {
 
 [ "$1" = "-v" ] && version
 
-"$@"
+if [ $0 = $BASH_SOURCE ]; then
 
-echo 'USAGE scan|connect|add {network} {pass}|open {network}|dump|interface|version' >&2
+  "$@"
+  echo 'USAGE scan|connect|add {network} {pass}|open {network}|dump|interface|version' >&2
 
+fi
