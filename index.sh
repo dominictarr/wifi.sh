@@ -42,6 +42,9 @@ parse () {
       ;;
       SSID*)
         SSID=${LINE#SSID: }
+        if [ "$SSID" = "SSID:" ]; then
+          SSID=$BSS
+        fi
       ;;
       signal*)
         SIGNAL=${LINE#signal: }
