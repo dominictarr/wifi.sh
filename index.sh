@@ -80,6 +80,7 @@ scanraw () {
 scan () {
   isroot
   get_interface
+  ip link set $INTERFACE up
   echo 'SSID                                    , SIGNAL , SECURITY'
 
   # to be honest, I can't figure out the correct parameters
