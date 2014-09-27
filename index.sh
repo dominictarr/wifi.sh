@@ -60,9 +60,12 @@ parse () {
   printf '%-40s, %5s , %s\n' "$SSID" "$SIGNAL" "$ENC"
 }
 
+preparse () {
+  grep -E '(^BSS)|SSID|signal|WPA|WPS|WEP|RSN'
+}
+
 _scanraw () {
-  iw dev "$INTERFACE" scan \
-  | grep -E '(^BSS)|SSID|signal|WPA|WPS|WEP|RSN'
+  iw dev "$INTERFACE" scan | preparse
 }
 
 scanraw () {
