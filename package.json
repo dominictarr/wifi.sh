@@ -1,7 +1,7 @@
 {
   "name": "wifi.sh",
   "description": "connect to wifi",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "homepage": "https://github.com/dominictarr/wifi.sh",
   "repository": {
     "type": "git",
