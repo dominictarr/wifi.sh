@@ -99,19 +99,19 @@ parse_interface () {
 }
 
 get_interface () {
-  # Grab the most recently added interface.
+  # Grab the most recently added interface with the prefix wl.
   # Your laptop may use a wifi chipset that has poor linux driver support.
   # (this is because of microsoft's consipracy against linux)
   # In this case, you may have more success using a usb wifi dongle.
   # If you are using a wifi dongle this should return the one
   # that you most recently plugged in.
 
-  INTERFACE=${INTERFACE-$(ip -o link | grep 'state UP' | parse_interface)}
+  INTERFACE=${INTERFACE-$(ip -o link | grep '^[0-9]: wl' | parse_interface)}
+  echo $INTERFACE
 }
 
 interface () {
   get_interface
-  echo $INTERFACE
   exit 0
 }
 
