@@ -106,7 +106,7 @@ get_interface () {
   # If you are using a wifi dongle this should return the one
   # that you most recently plugged in.
 
-  INTERFACE=${INTERFACE-$(ip -o link | grep '^[0-9]: wl' | parse_interface)}
+  INTERFACE=${INTERFACE-$(ip -o link | grep '^[0-9]\+: wl' | parse_interface)}
   echo $INTERFACE
 }
 
