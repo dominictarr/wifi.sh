@@ -12,7 +12,7 @@ isroot () {
   fi
 }
 
-add () {
+_add () {
   # use wpa_passphrase command to add the new network to wpa_supplicant conf.
   # wpa_passphrase dumps the error message on stdout
   # because they do not understand unix.
@@ -22,7 +22,12 @@ add () {
     echo Error: $PASS 1>&2
     exit 1
   }
-  echo "$PASS" >> $WPA_CONF
+
+  echo "$PASS"
+}
+
+add () {
+  _add "$1" "$2" >> $WPA_CONF
   exit 0
 }
 
@@ -124,9 +129,17 @@ connect () {
   isroot
   dhcpcd #start dhcpcd if necessary
   get_interface
+
+  # if there is a password, create a temp wpa_supplicant.conf
+  if [ "x$1" != x ]; then
+    WPA_CONF=/tmp/wifish.wpa_supplicant.conf
+    _add "$1" "$2" > $WPA_CONF
+  fi
+
   # if there are two wpa_supplicants running, things break.
   killall wpa_supplicant
-  wpa_supplicant -i $INTERFACE -c $WPA_CONF
+  echo wpa_supplicant -i $INTERFACE -c"$WPA_CONF"
+  wpa_supplicant -i $INTERFACE -c"$WPA_CONF"
   exit $?
 }
 
