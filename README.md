@@ -16,6 +16,18 @@ sudo wifi.sh connect
 #add a network to file.
 sudo wifi.sh add SSID passphrase
 
+# show your mac address
+
+sudo wifi.sh mac
+
+# set your mac address randomly.
+
+sudo wifi.sh randmac
+
+# set your mac address manually
+
+sudo wifi.sh 01:23:45:67:89:ab
+
 #show current interface
 
 wifi.sh interface
@@ -39,6 +51,8 @@ sudo wifi.sh open "A great SSID"
 # disconnect any wifi network
 
 sudo INTERFACE=wlan0 wifi.sh disconnect
+```
+
 
 ```
 
