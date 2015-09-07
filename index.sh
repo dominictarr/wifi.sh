@@ -31,6 +31,10 @@ add () {
   exit 0
 }
 
+## SCAN FOR NETWORKS
+
+# readable list of available networks.
+
 parse () {
   # parse the output of iw scan
   while read LINE;
@@ -94,6 +98,10 @@ scan () {
   exit 0
 }
 
+## NETWORK INTERFACES
+
+# detect network interfaces
+
 parse_interface () {
   while read line;
   do
@@ -124,6 +132,8 @@ dump () {
   cat $WPA_CONF
   exit 0
 }
+
+## CONNECTIONS
 
 connect () {
   isroot
@@ -189,6 +199,58 @@ disconnect () {
   exit 0
 }
 
+## MAC ADDRESSES ##
+
+# change your mac.
+# useful for airport wifi...
+
+_setmac () {
+  set -e
+  ip link set dev $INTERFACE address $1 2> /dev/null
+
+}
+
+_random () {
+  r=$r`printf %X%X%X $RANDOM $RANDOM $RANDOM`
+  o=${r:0:2}
+  o=$o:${r:2:2}
+  o=$o:${r:4:2}
+  o=$o:${r:6:2}
+  o=$o:${r:8:2}
+  o=$o:${r:10:2}
+  echo $o
+}
+
+mac () {
+  get_interface > /dev/null
+  d=`ip link show $INTERFACE`
+  d=${d#*link/ether }
+  d=${d%% *}
+  echo $d
+  exit 0
+}
+
+setmac () {
+  isroot
+  get_interface > /dev/null
+  ip link set dev $INTERFACE down
+  _setmac $1
+  ip link set dev $INTERFACE up
+  exit 0
+}
+
+randmac () {
+  isroot
+  get_interface > /dev/null
+  ip link set dev $INTERFACE down
+
+  # sometimes this doesn't work, so try a few times...
+  until (_setmac `_random`); do true; done
+  ip link set dev $INTERFACE up
+  mac
+}
+
+
 version () {
   v=$(grep version $(dirname $(realpath "$0"))/package.json)
   v=${v%'"'*}
@@ -202,6 +264,6 @@ version () {
 if [ "$0" = "$BASH_SOURCE" ]; then
 
   "$@"
-  echo 'USAGE scan|connect|add {network} {pass}|open {network}|dump|interface|version' >&2
+  echo 'USAGE scan|connect|add {network} {pass}|open {network}|dump|interface|version|mac|randmac|setmac {mac}' >&2
 
 fi
