@@ -53,20 +53,19 @@ sudo wifi.sh open "A great SSID"
 sudo INTERFACE=wlan0 wifi.sh disconnect
 ```
 
-
-```
-
 ## Cool Links
 
-Some other wifi utils on npm,
+Some other wifi utils on npm:
 
 * [wit](https://github.com/substack/wit)
 * [wireless](https://github.com/tlhunter/node-wireless)
-* [wifi-password (for osx)](https://github.com/rauchg/wifi-password)
+* [wifi-password (for macOS)](https://github.com/rauchg/wifi-password)
 
 These both use node, wifi.sh has the distinction that it is
 all in bash, so will run where there are very low resources,
 such as on a raspberry pi.
+
+Arch Linux users may want to check out [netctl](https://wiki.archlinux.org/index.php/netctl).
 
 ## License
 
