@@ -1,6 +1,6 @@
 # wifi.sh
 
-bash script to connect to wifi
+bash script to connect to wifi (on linux)
 
 # Usage
 
@@ -58,10 +58,11 @@ sudo INTERFACE=wlan0 wifi.sh disconnect
 
 ## Cool Links
 
-Some other `wpa_supplicant` wrappers on npm,
+Some other wifi utils on npm,
 
 * [wit](https://github.com/substack/wit)
 * [wireless](https://github.com/tlhunter/node-wireless)
+* [wifi-password (for osx)](https://github.com/rauchg/wifi-password)
 
 These both use node, wifi.sh has the distinction that it is
 all in bash, so will run where there are very low resources,
