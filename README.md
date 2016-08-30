@@ -2,11 +2,20 @@
 
 bash script to connect to wifi (on linux)
 
+# Install
+
+with npm
+```
+npm install -g wifi.sh
+```
+without npm
+```
+curl https://raw.githubusercontent.com/dominictarr/wifi.sh/master/index.sh > /usr/bin/wifi.sh; chmod +x /usr/bin/wifi.sh
+```
+
 # Usage
 
 ``` bash
-npm install -g wifi.sh
-
 #list currently available wifi networks.
 sudo wifi.sh scan
 
@@ -71,3 +80,5 @@ such as on a raspberry pi.
 ## License
 
 MIT
+
+
