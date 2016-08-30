@@ -62,9 +62,6 @@ sudo wifi.sh open "A great SSID"
 sudo INTERFACE=wlan0 wifi.sh disconnect
 ```
 
-
-```
-
 ## Cool Links
 
 Some other wifi utils on npm,
